@@ -1,4 +1,4 @@
 package com.example.patients.Controller;
 
-public class patientController {
+public class PatientController {
 }

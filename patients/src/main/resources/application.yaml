@@ -1,3 +1,6 @@
 spring:
   application:
     name: patients
+  cloud:
+    config:
+      enabled: false
