@@ -6,15 +6,14 @@ spring:
     config:
       enabled: false
     consul:
-      host: localhost
+      host: consul
       port: 8500
       discovery:
         hostname: patients
-        health-check-url: http://patients:8080/actuator/health
         health-check-interval: 10s
 
   datasource:
-    url: jdbc:mysql://localhost:3308/healthcare
+    url: jdbc:mysql://mysql:3306/healthcare
     username: admin_healthcare
     password: healthadmin123
     driver-class-name: com.mysql.cj.jdbc.Driver
