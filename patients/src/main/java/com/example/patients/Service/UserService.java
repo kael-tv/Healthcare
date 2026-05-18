@@ -9,6 +9,8 @@ import java.util.List;
 @Service
 public class UserService {
 
+
+        //Bean Injection
         private final UserRepository userRepository;
 
         public UserService(UserRepository userRepository) {

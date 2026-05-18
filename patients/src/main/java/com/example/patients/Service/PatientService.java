@@ -4,6 +4,7 @@ import com.example.patients.Model.Patient;
 import com.example.patients.Repository.PatientRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -32,8 +33,15 @@ public class PatientService {
 
         //Update
         public Patient updatePatient(Long id, Patient patient) {
-                patient.setId(id);
-                return patientRepository.save(patient);
+                Patient existing = patientRepository.findById(id).orElseThrow();
+                existing.setFirstName(patient.getFirstName());
+                existing.setLastName(patient.getLastName());
+                existing.setBirthdayDate(patient.getBirthdayDate());
+                existing.setGender(patient.getGender());
+                existing.setAddress(patient.getAddress());
+                existing.setPhoneNumber(patient.getPhoneNumber());
+                existing.setMail(patient.getMail());
+                return patientRepository.save(existing);
         }
 
         //Delete
