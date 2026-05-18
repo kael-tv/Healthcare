@@ -2,7 +2,7 @@ package com.example.doctors.controller;
 
 import com.example.doctors.model.Doctor;
 import com.example.doctors.service.DoctorService;
-import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -23,13 +23,6 @@ public class DoctorController {
         public List<Doctor> getAllDoctors {
                 return doctorService.getAllDoctors();
         }
-
-
-
-
-
-
-
 
 
 
