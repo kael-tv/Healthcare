@@ -2,6 +2,7 @@ package com.example.patients.Controller;
 
 import com.example.patients.Model.Patient;
 import com.example.patients.Service.PatientService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,8 +18,8 @@ public class PatientController {
         }
 
         @GetMapping
-        public List<Patient> getAllPatients() {
-                return patientService.getAllPatients();
+        public ResponseEntity <List<Patient>> getAllPatients() {
+                return ResponseEntity.ok(patientService.getAllPatients()); ///TODO
         }
 
         @GetMapping("/{id}")

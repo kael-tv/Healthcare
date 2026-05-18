@@ -1,5 +1,6 @@
 package com.example.patients.Service;
 
+import com.example.patients.Exception.ResourceNotFoundException;
 import com.example.patients.Model.User;
 import com.example.patients.Repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,8 @@ public class UserService {
         }
 
         public User getById(Long id) {
-                return userRepository.findById(id).orElseThrow();
+                return userRepository.findById(id)
+                        .orElseThrow(()-> new ResourceNotFoundException("User not found with id: " + id));
         }
 
         //Create
@@ -33,7 +35,9 @@ public class UserService {
 
         //Update
         public User updateUser(Long id, User user) {
-                User existing = userRepository.findById(id).orElseThrow();
+                User existing = userRepository.findById(id)
+                        .orElseThrow(()-> new ResourceNotFoundException("User not found with id: " + id));
+
                 existing.setUserName(user.getUserName());
                 existing.setPassword(user.getPassword());
                 return userRepository.save(existing);
@@ -41,6 +45,7 @@ public class UserService {
 
         //Delete
         public void deleteById(Long id) {
+                userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found with id: " + id));
                 userRepository.deleteById(id);
         }
 

@@ -1,10 +1,10 @@
 package com.example.patients.Service;
 
+import com.example.patients.Exception.ResourceNotFoundException;
 import com.example.patients.Model.Patient;
 import com.example.patients.Repository.PatientRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,7 +23,8 @@ public class PatientService {
         }
 
         public Patient getById(Long id) {
-                return patientRepository.findById(id).orElseThrow();
+                return patientRepository.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
         }
 
         //Create
@@ -33,7 +34,8 @@ public class PatientService {
 
         //Update
         public Patient updatePatient(Long id, Patient patient) {
-                Patient existing = patientRepository.findById(id).orElseThrow();
+                Patient existing = patientRepository.findById(id).
+                        orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
                 existing.setFirstName(patient.getFirstName());
                 existing.setLastName(patient.getLastName());
                 existing.setBirthdayDate(patient.getBirthdayDate());
@@ -46,6 +48,7 @@ public class PatientService {
 
         //Delete
         public void deleteById(Long id) {
+                patientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
                 patientRepository.deleteById(id);
         }
 
