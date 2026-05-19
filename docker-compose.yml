@@ -82,6 +82,24 @@ services:
     networks:
       - healthcare-network
 
+
+  webapp:
+    image: webapp
+    container_name: webapp
+    mem_limit: 700m
+    restart: on-failure
+    ports:
+      - "8090:8090"
+    depends_on:
+      config-server:
+        condition: service_healthy
+      consul:
+        condition: service_healthy
+      patients:
+        condition: service_started
+    networks:
+      - healthcare-network
+
 volumes:
   mysql_data:
 
