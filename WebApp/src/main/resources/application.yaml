@@ -1,5 +1,5 @@
 spring:
   application:
-    name: patients
+    name: webapp
   config:
     import: configserver:http://config-server:8071/

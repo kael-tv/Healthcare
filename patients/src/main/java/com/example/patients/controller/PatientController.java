@@ -1,5 +1,4 @@
 package com.example.patients.controller;
-
 import com.example.patients.model.Patient;
 import com.example.patients.service.PatientService;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +17,8 @@ public class PatientController {
         }
 
         @GetMapping
-        public ResponseEntity <List<Patient>> getAllPatients() {
-                return ResponseEntity.ok(patientService.getAllPatients()); ///TODO
+        public List<Patient> getAllPatients() {
+                return patientService.getAllPatients();
         }
 
         @GetMapping("/{id}")
