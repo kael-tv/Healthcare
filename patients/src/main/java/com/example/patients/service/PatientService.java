@@ -1,11 +1,9 @@
-package com.example.patients.Service;
+package com.example.patients.service;
 
 import com.example.patients.exception.ResourceNotFoundException;
 import com.example.patients.model.Patient;
 import com.example.patients.repository.PatientRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 import java.util.List;
 
 @Service
