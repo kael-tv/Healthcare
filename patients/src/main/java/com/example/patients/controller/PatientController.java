@@ -1,7 +1,6 @@
 package com.example.patients.controller;
 import com.example.patients.model.Patient;
-import com.example.patients.service.PatientService;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,9 +9,10 @@ import java.util.List;
 @RequestMapping("/Patients")
 public class PatientController {
 
-        private final PatientService patientService;
 
-        public PatientController(PatientService patientService) {
+        private final com.example.patients.service.PatientService patientService;
+
+        public PatientController(com.example.patients.service.PatientService patientService) {
                 this.patientService = patientService;
         }
 
