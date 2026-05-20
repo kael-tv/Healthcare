@@ -1,0 +1,108 @@
+#TODO héritage
+services:
+  config-server:
+    image: config-server
+    mem_limit: 700m
+    container_name: config-server
+    restart: on-failure
+    ports:
+      - "8071:8071"
+    networks:
+      - healthcare-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8071/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  consul:
+    image: kaeldev/consul:latest
+    mem_limit: 700m
+    container_name: consul
+    ports:
+      - "8500:8500"
+    command: "agent -dev -client=0.0.0.0"
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:8500/v1/status/leader" ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    depends_on:
+      config-server:
+        condition: service_healthy
+    networks:
+      - healthcare-network
+
+  mysql:
+    image: mysql:8
+    mem_limit: 700m
+    container_name: mysql-healthcare_bd
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: healthcare
+      MYSQL_USER: admin_healthcare
+      MYSQL_PASSWORD: healthadmin123
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    depends_on:
+      config-server:
+        condition: service_healthy
+    networks:
+      - healthcare-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  patients:
+    image: patients
+    container_name: patients
+    mem_limit: 700m
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    depends_on:
+      config-server:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      consul:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "patients"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/healthcare"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
+      SPRING_CLOUD_CONSUL_PORT: "8500"
+    networks:
+      - healthcare-network
+
+
+  webapp:
+    image: webapp
+    container_name: webapp
+    mem_limit: 700m
+    restart: on-failure
+    ports:
+      - "8090:8090"
+    depends_on:
+      config-server:
+        condition: service_healthy
+      consul:
+        condition: service_healthy
+      patients:
+        condition: service_started
+    networks:
+      - healthcare-network
+
+volumes:
+  mysql_data:
+
+networks:
+  healthcare-network:
+    driver: "bridge"

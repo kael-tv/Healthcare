@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: doctors
+  cloud:
+    config:
+      enabled: false
+#TODO BDD + Cloud config

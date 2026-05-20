@@ -1,0 +1,13 @@
+server:
+  port: 8071
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/kael-tv/Healthcare-config
+          default-label: main
+          clone-on-start: true
