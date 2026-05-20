@@ -1,7 +1,5 @@
 spring:
   application:
     name: doctors
-  cloud:
-    config:
-      enabled: false
-#TODO BDD + Cloud config
+  config:
+    import: configserver:http://config-server:8071/
