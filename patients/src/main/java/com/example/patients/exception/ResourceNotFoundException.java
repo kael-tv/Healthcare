@@ -1,4 +1,4 @@
-package com.example.patients.exception;
+package com.example.patients.Exception;
 
 public class ResourceNotFoundException extends RuntimeException {
         public ResourceNotFoundException(String message) {
