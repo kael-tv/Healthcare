@@ -1,7 +1,7 @@
 package com.example.doctors.service;
 
 
-import com.example.doctors.Exception.ResourceNotFoundException;
+import com.example.doctors.exception.ResourceNotFoundException;
 import com.example.doctors.model.Doctor;
 import com.example.doctors.repository.DoctorRepository;
 import org.springframework.stereotype.Service;

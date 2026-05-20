@@ -1,4 +1,4 @@
-package com.example.doctors.Exception;
+package com.example.doctors.exception;
 
 import com.example.doctors.response.ApiResponse;
 import org.springframework.http.HttpStatus;
