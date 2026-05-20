@@ -2,11 +2,12 @@ mvn clean package -DskipTests
 mvn package -DskipTests
 
 
-
-#####TODO Il faut absolument que config server fonctionne, faire tourner le ms doctors ms, vérifer l'api
-###revoir validation côté patient et response entity
-###héritage docker compose
+###TODO tester api doctors
+###TODO revoir validation côté patient et response entity
+###TODO héritage docker compose + découpage clean
 
 #facultatif: jib
 #circuit breaker
-#refactorer les adresses des endpoints 
+
+#très facultatif
+#refactorer les adresses des endpoints des 2 api avec des termes + pro
