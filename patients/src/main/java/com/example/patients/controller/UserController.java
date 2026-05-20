@@ -2,6 +2,8 @@ package com.example.patients.controller;
 
 import com.example.patients.model.User;
 import com.example.patients.service.UserService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,34 +22,35 @@ public class UserController {
         }
 
         @GetMapping
-        public List<User> getAllUsers() {
-                return userService.getAllUsers();
+        public ResponseEntity<List<User>> getAllUsers() {
+                return ResponseEntity.ok(userService.getAllUsers());
         }
 
         @GetMapping("/{id}")
         public ResponseEntity<User> getById (@PathVariable Long id) {
-                User user = userService.getById(id);
+                User user = userService.getById(id); // Instantiate the object to return it in the ResponseEntity
                 return ResponseEntity.ok(user);
         }
 
 
         @GetMapping("/by-username/{username}")
-        public User findByUserName(@PathVariable String username) {
-                return userService.findByUserName(username);
+        public ResponseEntity<User> findByUserName(@PathVariable String username) {
+                return ResponseEntity.ok(userService.findByUserName(username)); //200
         }
 
         @PostMapping
-        public User addUser(@RequestBody User user) {
-                return userService.addUser(user);
+        public ResponseEntity<User> addUser(@RequestBody @Valid User user) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(userService.addUser(user)); //201 Created
         }
 
         @PutMapping("/{id}")
-        public User updateUser(@PathVariable Long id, @RequestBody User user) {
-                return userService.updateUser(id, user);
+        public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody @Valid User user) {
+                return ResponseEntity.ok(userService.updateUser(id, user));
         }
 
         @DeleteMapping("/{id}")
-        public void deleteUser(@PathVariable Long id) {
+        public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
                 userService.deleteById(id);
+                return ResponseEntity.noContent().build(); //204 no content
         }
 }

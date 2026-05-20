@@ -1,3 +1,4 @@
+**mvn clean package -DskipTests**
 mvn package -DskipTests
 
 #TODO Response entity (+ validation etc)
