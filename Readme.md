@@ -1,5 +1,6 @@
 mvn package -DskipTests
 
-#TODO héritage docker compose 
-#TODO Response entity
+#TODO Response entity (+ validation etc)
+#TODO héritage docker compose
+
 #TODO doctors ms
