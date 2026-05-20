@@ -15,6 +15,9 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
+    environment:
+      - GIT_USERNAME=${GIT_USERNAME}
+      - GIT_TOKEN=${GIT_TOKEN}
 
   consul:
     image: kaeldev/consul:latest
