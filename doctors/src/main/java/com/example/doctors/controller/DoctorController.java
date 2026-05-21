@@ -1,11 +1,13 @@
 package com.example.doctors.controller;
 
-import com.example.doctors.model.Doctor;
+import com.example.doctors.dto.DoctorRequestDto;
+import com.example.doctors.dto.DoctorResponseDto;
 import com.example.doctors.service.DoctorService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -19,31 +21,30 @@ public class DoctorController {
 
         //Read
         @GetMapping
-        public ResponseEntity<List<Doctor>> getAllDoctors() {
+        public ResponseEntity<List<DoctorResponseDto>> getAllDoctors() {
                 return ResponseEntity.ok(doctorService.getAllDoctors());
         }
 
         @GetMapping("/{id}")
-        public ResponseEntity<Doctor> getById(@PathVariable Long id) {
-                Doctor doctor = doctorService.getById(id);
-                return ResponseEntity.ok(doctor);
+        public ResponseEntity<DoctorResponseDto> getById(@PathVariable Long id) {
+                return ResponseEntity.ok(doctorService.getById(id));
         }
 
         @GetMapping("/username/{username}")
-        public ResponseEntity<Doctor> findByUserName(@PathVariable String username) {
+        public ResponseEntity<DoctorResponseDto> findByUserName(@PathVariable String username) {
                 return ResponseEntity.ok(doctorService.findByUserName(username)); // 200
         }
 
         //Create
         @PostMapping
-        public ResponseEntity<Doctor> addDoctor (@RequestBody @Valid Doctor doctor) {
-                return ResponseEntity.status(HttpStatus.CREATED).body(doctorService.addDoctor(doctor)); // 201 Created
+        public ResponseEntity<DoctorResponseDto> addDoctor (@RequestBody @Valid DoctorRequestDto dto) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(doctorService.addDoctor(dto)); // 201 Created
         }
 
         //Update
         @PutMapping("/{id}")
-        public ResponseEntity<Doctor> updateDoctor(@PathVariable Long id, @RequestBody @Valid Doctor doctor) {
-                return ResponseEntity.ok(doctorService.updateDoctor(id, doctor));
+        public ResponseEntity<DoctorResponseDto> updateDoctor(@PathVariable Long id, @RequestBody @Valid DoctorRequestDto dto) {
+                return ResponseEntity.ok(doctorService.updateDoctor(id, dto));
         }
 
         //Delete

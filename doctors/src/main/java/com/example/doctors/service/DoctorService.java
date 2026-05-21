@@ -1,58 +1,72 @@
 package com.example.doctors.service;
 
 
+import com.example.doctors.dto.DoctorRequestDto;
+import com.example.doctors.dto.DoctorResponseDto;
 import com.example.doctors.exception.ResourceNotFoundException;
+import com.example.doctors.mapper.DoctorMapper;
 import com.example.doctors.model.Doctor;
 import com.example.doctors.repository.DoctorRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DoctorService {
 
         //Bean injection
         private final DoctorRepository doctorRepository;
+        private final DoctorMapper doctorMapper;
 
-        public DoctorService(DoctorRepository doctorRepository) {
+        public DoctorService(DoctorRepository doctorRepository, DoctorMapper doctorMapper) {
                 this.doctorRepository = doctorRepository;
+                this.doctorMapper = doctorMapper;
         }
 
         //Read
-        public List<Doctor> getAllDoctors() {
-                return doctorRepository.findAll();
+        public List<DoctorResponseDto> getAllDoctors() {
+                return doctorRepository.findAll()
+                        .stream()
+                        .map(doctorMapper::toResponseDto)
+                        .collect(Collectors.toList());
         }
 
-        public Doctor getById(Long id) {
-                return doctorRepository.findById(id)
+        public DoctorResponseDto getById(Long id) {
+                Doctor doctor = doctorRepository.findById(id)
                         .orElseThrow(()-> new ResourceNotFoundException("Doctor not found with id: " + id));
+                return doctorMapper.toResponseDto(doctor);
+
         }
 
-        public Doctor findByUserName(String userName) {
-                return doctorRepository.findByUserName(userName)
+        public DoctorResponseDto findByUserName(String userName) {
+                Doctor doctor = doctorRepository.findByUserName(userName)
                         .orElseThrow(()-> new ResourceNotFoundException("Doctor not found with this username"));
+                return doctorMapper.toResponseDto(doctor);
         }
 
         //Create
-        public Doctor addDoctor(Doctor doctor) {
-                return doctorRepository.save(doctor);
+        public DoctorResponseDto addDoctor(DoctorRequestDto dto) {
+                Doctor doctor = doctorMapper.toEntity(dto);
+                return doctorMapper.toResponseDto(doctorRepository.save(doctor));
         }
 
         //Update
-        public Doctor updateDoctor(Long id, Doctor doctor) {
+        public DoctorResponseDto updateDoctor(Long id, DoctorRequestDto dto) {
                 Doctor existing = doctorRepository.findById(id)
                         .orElseThrow(()-> new ResourceNotFoundException("Doctor not found with id: " + id));
 
-                existing.setUserName(doctor.getUserName());
-                existing.setPassword(doctor.getPassword());
+                existing.setUserName(dto.getUserName());
+                existing.setPassword(dto.getPassword());
 //                existing.setRole(doctor.getRole());
-                return doctorRepository.save(existing);
+                return doctorMapper.toResponseDto(doctorRepository.save(existing));
 
 
         }
 
         //Delete
         public void deleteById(Long id) {
-                doctorRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found with id: " + id));
+                doctorRepository.findById(id)
+                        .orElseThrow(()-> new ResourceNotFoundException("User not found with id: " + id));
                 doctorRepository.deleteById(id);
         }
 
