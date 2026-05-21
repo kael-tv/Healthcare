@@ -1,11 +1,24 @@
 mvn clean package -DskipTests
 mvn package -DskipTests
 
+Roadmap ajout de méthode:
+-Repository (JPA)
+-Service, (appelle le repo, donne responsedto)
+-Controller (avec endpoint, @PathVariable, @RequestParam, @Body etc)
+    
 
-###TODO tester api doctors
-###TODO DTO
+prochaine fois:
+Modèle — l'entité JPA, les champs, sans validation
+Repository — juste l'interface JPA
+DTO — Request et Response tout de suite, avant même le service
+Mapper — la conversion entre entité et DTO
+Service — avec les DTO dès le départ
+Controller — avec ResponseEntity dès le départ
+Validation — les annotations sur les RequestDto
+GlobalExceptionHandler — une fois pour tout le projet, réutilisable
 
-###TODO revoir validation côté patient et response entity
+###TODO DTO 
+
 ###TODO héritage docker compose + découpage clean
 
 #facultatif: jib

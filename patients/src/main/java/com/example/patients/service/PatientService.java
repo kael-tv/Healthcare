@@ -1,53 +1,59 @@
 package com.example.patients.service;
 
+import com.example.patients.dto.PatientRequestDto;
+import com.example.patients.dto.PatientResponseDto;
 import com.example.patients.exception.ResourceNotFoundException;
+import com.example.patients.mapper.PatientMapper;
 import com.example.patients.model.Patient;
 import com.example.patients.repository.PatientRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PatientService {
 
         //Bean injection
         private final PatientRepository patientRepository;
+        private final PatientMapper patientMapper;
 
-        public PatientService(PatientRepository patientRepository) {
+        public PatientService(PatientRepository patientRepository, PatientMapper patientMapper) {
                 this.patientRepository = patientRepository;
+                this.patientMapper = patientMapper;
         }
 
         //Read
-        public List<Patient> getAllPatients() {
-                return patientRepository.findAll();
+        public List<PatientResponseDto> getAllPatients() {
+                return patientRepository.findAll()
+                        .stream()
+                        .map(patientMapper::toResponseDto)
+                        .collect(Collectors.toList());
         }
 
-        public Patient getById(Long id) {
-                return patientRepository.findById(id)
+        public PatientResponseDto getById(Long id) {
+                Patient patient = patientRepository.findById(id)
                         .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
+                return patientMapper.toResponseDto(patient);
         }
 
         //Create
-        public Patient addPatient(Patient patient) {
-                return patientRepository.save(patient);
+        public PatientResponseDto addPatient(PatientRequestDto dto) {
+                Patient patient = patientMapper.toEntity(dto);
+                return patientMapper.toResponseDto(patientRepository.save(patient));
         }
 
         //Update
-        public Patient updatePatient(Long id, Patient patient) {
+        public PatientResponseDto updatePatient(Long id, PatientRequestDto dto) {
                 Patient existing = patientRepository.findById(id).
                         orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
-                existing.setFirstName(patient.getFirstName());
-                existing.setLastName(patient.getLastName());
-                existing.setBirthdayDate(patient.getBirthdayDate());
-                existing.setGender(patient.getGender());
-                existing.setAddress(patient.getAddress());
-                existing.setPhoneNumber(patient.getPhoneNumber());
-                existing.setMail(patient.getMail());
-                return patientRepository.save(existing);
+                patientMapper.updateEntity(existing, dto);
+                return patientMapper.toResponseDto(patientRepository.save(existing));
         }
 
         //Delete
         public void deleteById(Long id) {
-                patientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
+                patientRepository.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id: " + id));
                 patientRepository.deleteById(id);
         }
 

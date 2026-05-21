@@ -1,19 +1,12 @@
-package com.example.patients.model;
+package com.example.patients.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-@Entity
-public class Patient {
+public class PatientResponseDto {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
         private String firstName;

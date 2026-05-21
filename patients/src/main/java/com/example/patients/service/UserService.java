@@ -1,11 +1,15 @@
 package com.example.patients.service;
 
+import com.example.patients.dto.UserRequestDto;
+import com.example.patients.dto.UserResponseDto;
 import com.example.patients.exception.ResourceNotFoundException;
+import com.example.patients.mapper.UserMapper;
 import com.example.patients.model.User;
 import com.example.patients.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -13,45 +17,56 @@ public class UserService {
 
         //Bean Injection
         private final UserRepository userRepository;
+        private final UserMapper userMapper;
 
-        public UserService(UserRepository userRepository) {
+        public UserService(UserRepository userRepository, UserMapper userMapper) {
                 this.userRepository = userRepository;
+                this.userMapper = userMapper;
         }
 
         //Read
-        public List<User> getAllUsers() {
-                return userRepository.findAll();
+        public List<UserResponseDto> getAllUsers() {
+                return userRepository.findAll()
+                        .stream()
+                        .map(userMapper::toResponseDto)
+                        .collect(Collectors.toList());
         }
 
-        public User getById(Long id) {
-                return userRepository.findById(id)
+        public UserResponseDto getById(Long id) {
+                User user = userRepository.findById(id)
                         .orElseThrow(()-> new ResourceNotFoundException("User not found with id: " + id));
+                return userMapper.toResponseDto(user);
+
         }
 
-        public User findByUserName(String userName) {
-                return userRepository.findByUserName(userName)
+        public UserResponseDto findByUserName(String userName) {
+                User user = userRepository.findByUserName(userName)
                         .orElseThrow(()-> new ResourceNotFoundException("User not found with this username"));
+                return userMapper.toResponseDto(user);
+
         }
 
         //Create
-        public User addUser(User user) {
-                return userRepository.save(user);
+        public UserResponseDto addUser(UserRequestDto dto) {
+                User user = userMapper.toEntity(dto);
+                return userMapper.toResponseDto(userRepository.save(user));
         }
 
         //Update
-        public User updateUser(Long id, User user) {
+        public UserResponseDto updateUser(Long id, UserRequestDto dto) {
                 User existing = userRepository.findById(id)
                         .orElseThrow(()-> new ResourceNotFoundException("User not found with id: " + id));
 
-                existing.setUserName(user.getUserName());
-                existing.setPassword(user.getPassword());
+                existing.setUserName(dto.getUserName());
+                existing.setPassword(dto.getPassword());
 //                existing.setRole(user.getRole));
-                return userRepository.save(existing);
+                return userMapper.toResponseDto(userRepository.save(existing));
         }
 
         //Delete
         public void deleteById(Long id) {
-                userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found with id: " + id));
+                userRepository.findById(id)
+                        .orElseThrow(()-> new ResourceNotFoundException("User not found with id: " + id));
                 userRepository.deleteById(id);
         }
 
