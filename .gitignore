@@ -12,9 +12,10 @@
 .DS_Store
 # IDE files
 /.idea
-
 target/
 # Env vars
 .env
 .env.*
 !.env.examplet
+# Docs
+.bak
