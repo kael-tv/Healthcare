@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler { ///TODO Expliquer ligne par ligne
+public class GlobalExceptionHandler {
 
-        @ExceptionHandler(ResourceNotFoundException.class)
+        @ExceptionHandler(com.example.patients.exception.ResourceNotFoundException.class)
         public ResponseEntity<ApiResponse<Void>> handleNotFound(ResourceNotFoundException ex) {
                 ApiResponse<Void> response = ApiResponse.<Void>builder()
                         .status(404)
