@@ -1,8 +1,0 @@
-com\example\WebApp\security\SecurityConfig.class
-com\example\WebApp\security\CustomUserDetailsService.class
-com\example\WebApp\WebAppApplication.class
-com\example\WebApp\dto\UserDto.class
-com\example\WebApp\client\PatientClient.class
-com\example\WebApp\controller\WebController.class
-com\example\WebApp\client\UserClient.class
-com\example\WebApp\dto\PatientDto.class

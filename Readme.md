@@ -3,6 +3,8 @@ mvn package -DskipTests
 
 
 ###TODO tester api doctors
+###TODO DTO
+
 ###TODO revoir validation côté patient et response entity
 ###TODO héritage docker compose + découpage clean
 
