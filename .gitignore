@@ -14,7 +14,11 @@
 /.idea
 
 target/
+
 # Env vars
 .env
 .env.*
 !.env.examplet
+
+#Notes
+.bak
