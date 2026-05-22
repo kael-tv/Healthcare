@@ -37,6 +37,30 @@ services:
     networks:
       - healthcare-network
 
+
+  mongo:
+    image: mongo:7.0.34-jammy
+    mem_limit: 700m
+    container_name: mongo-healthcare-bd
+    restart: always
+    #environment: #TODO
+    #MONGO_INITDB_ROOT_USERNAME:
+    #MONGO_INITDB_ROOT_PASSWORD:
+    #MONGO_INITDB_USER:
+    #MONGO_INITDB_PASSWORD:
+    ports:
+      - "27017:27017"
+    #volumes:
+     # - db_data:/data/db
+    networks:
+      - healthcare-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
   mysql:
     image: mysql:8
     mem_limit: 700m
